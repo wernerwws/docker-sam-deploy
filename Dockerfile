@@ -1,6 +1,6 @@
-FROM node:10.19-buster
+FROM node:12.18-buster
 
-# add stripe repo
+# Add stripe repo
 RUN apt-key adv --keyserver hkp://pool.sks-keyservers.net:80 --recv-keys 379CE192D401AB61
 RUN echo "deb https://dl.bintray.com/stripe/stripe-cli-deb stable main" | tee -a /etc/apt/sources.list
 
