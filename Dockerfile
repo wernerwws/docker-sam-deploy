@@ -1,10 +1,17 @@
-FROM node:12.18-buster
+FROM node:12.20.1-alpine3.12
 
-# Add stripe repo
-RUN apt-key adv --keyserver hkp://pool.sks-keyservers.net:80 --recv-keys 379CE192D401AB61
-RUN echo "deb https://dl.bintray.com/stripe/stripe-cli-deb stable main" | tee -a /etc/apt/sources.list
+RUN apk -v --no-cache --update add \
+bash \
+gcc \
+jq \
+musl-dev \
+py3-pip \
+python3 \
+python3-dev
 
-RUN apt update
-RUN apt install -y python3-pip jq stripe
-RUN pip3 install aws-sam-cli
-RUN pip3 install awscli
+RUN python3 -m ensurepip --upgrade && pip3 install --upgrade pip
+RUN pip3 install --upgrade aws-sam-cli awscli
+
+RUN apk del python3-dev gcc musl-dev
+
+COPY --from=stripe/stripe-cli:v1.5.8 /bin/stripe /bin/stripe
